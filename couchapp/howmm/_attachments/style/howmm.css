@@ -1,1 +1,57 @@
+body {
+  padding:0px;
+  margin: 0px;
+}
+
+h1 {
+  margin: 1px;
+}
+
+h2 {
+  margin: 1px;
+}
+
+.lefty {
+  float: left;
+}
+
+.clear {
+  clear: both;
+}
+
+#account {
+  font-size: 90%;
+  background-color: #DDD;
+}
+
+
+/* menu */
+
+#docs_menu {
+  margin: 10px 0px 10px 0px;
+}
+
+#docs_menu h1 {
+  font-size: 150%;
+  margin: 0px 10px;
+}
+
+#docs_menu h2 {
+  margin: 0px 10px;
+}
+
+#docs_menu #docs_message span {
+  background-color: #FFEE66;
+}
+
+
+/* body */
+
+#docs {
+  margin: 0px 10px;
+}
+
+#docs textarea {
+  width: 100%;
+}
 

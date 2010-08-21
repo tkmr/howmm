@@ -1,11 +1,6 @@
 function(resp){
-  var res = [];
-
-  $(resp.rows).each(function(){
-    res.push($.extend(this.value, {
-      href: "#/docs/" + encodeURIComponent(this.id)
-    }));
+  var res = zaisu.util.extend_rows(resp.rows, function(){
+    return { href: "#/docs/"+encodeURIComponent(this.id) };
   });
-
   return {docs: res};
 }
