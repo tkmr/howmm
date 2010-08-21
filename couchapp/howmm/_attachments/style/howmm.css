@@ -1,7 +1,29 @@
 body {
   font-family: Helvetica, HiraKakuProN-W3, sans-serif;
+  line-height:1.4;
   padding:0px;
   margin: 0px;
+}
+
+
+a, a:link, a:visited{
+  color: #32E;
+  text-decoration: none;
+  border-bottom: 1px dotted #98F;
+}
+a:hover{
+  color: #32E;
+  text-decoration: underline;
+}
+a:active{
+  color: #43F;
+}
+
+a.button h2{
+  background-color: #E9E9E9;
+  padding: 0px 8px;
+  -moz-border-radius:    7px;
+  -webkit-border-radius: 7px;
 }
 
 h1 {
@@ -10,6 +32,10 @@ h1 {
 
 h2 {
   margin: 1px;
+}
+
+.textright {
+  text-align: right;
 }
 
 .lefty {
@@ -26,14 +52,25 @@ h2 {
   margin: 0px 0px 4px 0px;
 }
 
+#docs_menu p {
+  margin: 0px;
+}
+
 #docs_menu h1 {
+  background-color: #E9E9E9;
   font-size: 120%;
-  margin: 0px 10px;
+  margin: 0px;
+  padding: 0px 12px;
+
+  -webkit-border-bottom-right-radius: 10px;
+  -webkit-border-bottom-left-radius:  10px;
+  -moz-border-radius-bottomright:     10px;
+  -moz-border-radius-bottomleft:      10px;
 }
 
 #docs_menu h2 {
   font-size: 120%;
-  margin: 5px 8px;
+  margin: 5px 6px;
 }
 
 #docs_message span {
@@ -64,21 +101,21 @@ h2 {
 }
 
 #docs .docs_body{
-  margin: 0px 5px;
+  margin: 5px 5px;
 }
 
 #docs textarea {
-  margin: 0px auto;
+  margin: 0px;
+  padding: 9px;
   width: 100%;
   border: 0 none;
-  background-color: #FFFFDD;
+  background-color: #F1F1F1;
 }
 
 
 /* -- account -- */
 #account {
   font-size: 90%;
-  background-color: #DDD;
 }
 
 #account p {

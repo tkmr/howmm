@@ -2,32 +2,38 @@
 <html>
   <head>
     <title>howmm</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link rel="stylesheet" href="style/howmm.css" type="text/css">
   </head>
   <body>
     <div id="docs_menu">
-      <a class="button" href="#/docs/edit/new"><h2 class="lefty">new</h2></a>
-      <a class="button" href="#/docs/edit/new"><h2 class="lefty">search</h2></a>
-      <a class="button" href="#/docs/edit/new"><h2 class="lefty">misc</h2></a>
+      <p>
+        <a class="button" href="#/docs"><h1>howmm</h1></a>
+      </p>
+      <p class="lefty">
+        <a class="button" href="#/docs/edit/new"><h2>new</h2></a>
+      </p>
+      <p class="lefty">
+        <a class="button" href="#/docs/edit/new"><h2>search</h2></a>
+      </p>
+      <p class="lefty">
+        <a class="button" href="#/docs/edit/new"><h2>misc</h2></a>
+      </p>
+
       <div class="clear"></div>
     </div>
 
     <div id="docs"></div>
+    <div id="docs_message"></div>
 
-    <div>
-      <a class="button" href="#/docs"><h1 class="lefty">howmm</h1></a>
-      <div id="docs_message">{}</div>
-      <div class="clear"></div>
+    <div class="textright">
+      <div id="account"></div>
+      <div id="cssipad"></div>
+      <div id="cssiphone"></div>
     </div>
 
-    <div id="account"></div>
-
-    <div id="cssios">.</div>
-    <div id="cssipad">.</div>
-    <div id="cssiphone">.</div>
   </body>
   <script src="vendor/couchapp/loader.js"></script>
   <script src="vendor/couchapp/jquery.pathbinder.js"></script>

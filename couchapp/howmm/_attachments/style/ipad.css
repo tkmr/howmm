@@ -1,7 +1,13 @@
-body {
-  background-color: #FFCCDD;
+@media screen and (max-width: 780px)
+{
+  #cssiphone:before {
+    content: "ipad portrait "
+  }
 }
 
-#cssipad:before {
-  content: "ipad landscape "
+@media screen and (min-width: 781px)
+{
+  #cssiphone:before {
+    content: "ipad landscape "
+  }
 }
