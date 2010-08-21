@@ -37,6 +37,17 @@ var zaisu = {};
         res.push($.extend(this.value, extend_func.apply(this)));
       });
       return res;
+    },
+    resize_textarea: function (textarea){
+      setTimeout(function(){
+        //if (ev.keyCode != 13) return;
+        var value = textarea.value || "";
+        var lines = 1 + (value.split(/\n/).length);
+        if($$(textarea).current_length !== lines){
+          textarea.setAttribute("rows", lines);
+          $$(textarea).current_length = lines;
+        }
+      }, 0);
     }
   };
 
@@ -48,6 +59,7 @@ var zaisu = {};
     },
 
     view: function(name, options){
+      //descending
       options = util.options_or_callback(options);
       this.db.view(this.design_name+'/'+name, options);
     },
@@ -62,6 +74,19 @@ var zaisu = {};
       this.db.saveDoc(obj, options);
     }
   });
+
+  za.css = {};
+  za.css.loader = function(options){
+    var load = function(name){
+      var css   = "<link rel='stylesheet' media='all' href='"+ name +"'>";
+      $("head").append(css);
+    };
+    if(navigator.userAgent.search(/iPad|iPhone/i) > -1){
+      load(options.ios);
+      if(navigator.userAgent.search(/iPhone/i) > -1) load(options.iphone);
+      if(navigator.userAgent.search(/iPad/i) > -1) load(options.ipad);
+    }
+  }
 
   za.util = util;
 

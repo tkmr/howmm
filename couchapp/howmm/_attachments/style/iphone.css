@@ -1,0 +1,14 @@
+@media screen and (max-width: 320px)
+{
+  #cssiphone:before {
+    content: "iphone portrait "
+  }
+}
+
+@media screen and (min-width: 321px)
+{
+  #cssiphone:before {
+    content: "iphone landscape "
+  }
+}
+

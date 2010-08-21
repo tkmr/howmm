@@ -1,0 +1,18 @@
+body {
+  line-height:1.3;
+  margin:0px;
+  padding:0px;
+  -webkit-text-size-adjust: none;
+}
+
+#cssios:before {
+  content: "iOS "
+}
+
+a.button {
+  -webkit-tap-highlight-color: #FD4;
+}
+
+textarea {
+  font-size: 110%;
+}

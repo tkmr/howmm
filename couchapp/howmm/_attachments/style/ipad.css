@@ -1,0 +1,7 @@
+body {
+  background-color: #FFCCDD;
+}
+
+#cssipad:before {
+  content: "ipad landscape "
+}

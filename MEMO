@@ -1,0 +1,21 @@
+CouchDB
+- MacはCouchDBXで
+-
+
+CouchApp
+- Mustache
+  -
+-
+
+iPhone対応
+- iCon     : <link rel="apple-touch-icon" href="/custom_icon.png" />
+- Width    : 320px / Height: 356px - 416px
+- Viewport : <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=no">
+
+- CSS
+  <link rel="stylesheet" media="all and (orientation:portrait)"  href="portrait.css">
+  <link rel="stylesheet" media="all and (orientation:landscape)" href="landscape.css">
+
+- fullscreen
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />

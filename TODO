@@ -1,2 +1,10 @@
 CouchApp:
+ - index => show のpartialか
+ - application cache (manifest)
+ - Add localStorage cache
+
+ - ubuntu-vboxへのせる
+ - iPad / iPhone 最適化 (UI)
+ - menu button のtap effect
+
  -  _rev対応、historyみたい

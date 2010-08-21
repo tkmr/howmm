@@ -1,8 +1,14 @@
 function(){
   var self = $(this);
   var old_data = $$(this).data;
-  var form = self.find('form');
 
+  var textarea = self.find("textarea");
+  textarea.bind("keydown", function(){
+    zaisu.util.resize_textarea(this);
+  });
+  zaisu.util.resize_textarea(textarea[0]);
+
+  var form = self.find('form');
   form.bind('submit', function(){
     var doc        = $.extend(old_data, form.serializeObject());
     doc.title      = doc.body.split('\n')[0];
