@@ -1,5 +1,2 @@
 {
-  "extensions":[
-    "egg:couchapp#autopush"
-  ]
 }

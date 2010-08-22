@@ -1,12 +1,15 @@
 CouchApp:
+ - buttonの表現が微妙 spanにする?
+   - clickをはでに
+ - iPad系では dblclick が使えない
+   - show updated_at on the list
  - index => show のpartialか
+ - ubuntu-vboxへのせる
+
  - application cache (manifest)
  - Add localStorage cache
  - Use Arrow or JSDefferd
  - URI navigator with Pathbinder
-
- - ubuntu-vboxへのせる
- - iPad / iPhone 最適化 (UI)
- - menu button のtap effect
-
  -  _rev対応、historyみたい
+ - iPad / iPhone 最適化 (UI)
+
