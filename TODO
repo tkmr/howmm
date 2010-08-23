@@ -5,6 +5,8 @@ CouchApp:
    - show updated_at on the list
  - index => show のpartialか
  - ubuntu-vboxへのせる
+ - autoresize no longtext 対応. (iphone)
+
 
  - application cache (manifest)
  - Add localStorage cache

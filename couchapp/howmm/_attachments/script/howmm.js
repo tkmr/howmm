@@ -1,14 +1,26 @@
 var howmm = {util: {}};
 (function(){
 
-  howmm.db = new zaisu.DB("howmm", {
+  var dbname = location.toString().match(/\/(howmm?)\//)[1];
+  howmm.db = new zaisu.DB(dbname, {
     design: 'howmm'
   });
 
-  howmm.util.message = function(message){
-    $("#docs_message")
+  howmm.docs = function(element, app){
+    $(element).evently("docs", app);
+    $(element).pathbinder("index", "/docs");
+    $(element).pathbinder("edit",  "/docs/edit/:id");
+    $(element).pathbinder("show",  "/docs/:id");
+
+    this.index = function(){
+      $(element).trigger("index");
+    }
+  }
+
+  howmm.util.message = function(message, base){
+    $(base).find(".docs_message")
       .hide()
-      .html("{ <span>"+ message +"</span> }")
+      .html("<span>"+ message +"</span>")
       .fadeIn("fast", function(){
         var self = this;
         setTimeout(function(){   $(self).fadeOut("slow")   }, 3000);

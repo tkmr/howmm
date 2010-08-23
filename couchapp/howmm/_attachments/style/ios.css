@@ -5,7 +5,3 @@ body {
 a.button {
   -webkit-tap-highlight-color: #FD4;
 }
-
-textarea {
-  font-size: 110%;
-}

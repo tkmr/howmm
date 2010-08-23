@@ -1,6 +1,6 @@
-function(){
-  var id = $$(this).data._id;
-  $(this).find("p.docs_body").dblclick(function(){
-    location.hash = "/docs/edit/" + id;
-  });
+function(e, params){
+  var app = $$(this).app;
+  var doc = $(this).find("div.doc_holder");
+  doc.evently('doc', app);
+  doc.trigger('show', [params]);
 }

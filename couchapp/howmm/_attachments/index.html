@@ -10,16 +10,13 @@
   <body>
     <div id="docs_menu">
       <p>
-        <a class="button" href="#/docs"><h1>howmm</h1></a>
+        <a href="#/docs"><h1>howmm</h1></a>
       </p>
       <p class="lefty">
-        <a class="button" href="#/docs/edit/new"><h2>new</h2></a>
+        <a class="button" href="#/docs/edit/new">new</a>
       </p>
       <p class="lefty">
-        <a class="button" href="#/docs/edit/new"><h2>search</h2></a>
-      </p>
-      <p class="lefty">
-        <a class="button" href="#/docs/edit/new"><h2>misc</h2></a>
+        <a class="button" href="#/docs/edit/new">search</a>
       </p>
 
       <div class="clear"></div>
@@ -51,7 +48,8 @@
       $("#account").evently("account", app);
       $.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
 
-      $("#docs").evently("docs", app);
+      var docs = new howmm.docs("#docs", app);
+      docs.index();
     });
   </script>
 </html>
