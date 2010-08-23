@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>key test</title>
+    <script src="vendor/couchapp/loader.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    $.couch.app(function(app) {
+      $("#input").bind("keydown", function(e){
+        var mes = ["<p>", "alt:",e.altKey, " ctrl:",e.ctrlKey, " keyCode:",e.keyCode, "</p>"];
+        $("#message").append(mes.join(""));
+      });
+    });
+    </script>
+  </head>
+  <body>
+
+    <div id="message"></div>
+    <textarea id="input"></textarea>
+
+  </body>
+</html>

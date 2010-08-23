@@ -1,5 +1,10 @@
-#docs #doc_holder textarea {
-  padding: 2px;
+#docs p.docs_body {
+  font-size: 74% !important;
+}
+
+#docs textarea {
+  font-size: 74% !important;
+  padding: 1px;
 }
 
 #docs .content{

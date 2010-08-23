@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html manifest="index.manifest">
   <head>
     <title>howmm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <!--
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    -->
     <link rel="stylesheet" href="style/howmm.css" type="text/css">
   </head>
   <body>
     <div id="docs_menu">
-      <p>
-        <a href="#/docs"><h1>howmm</h1></a>
-      </p>
+      <p></p>
       <p class="lefty">
         <a class="button" href="#/docs/edit/new">new</a>
+      </p>
+      <p class="lefty">
+        <a class="button" href="#/docs">index</a>
       </p>
       <p class="lefty">
         <a class="button" href="#/docs/edit/new">search</a>
@@ -38,15 +41,17 @@
   <script src="script/howmm.js"></script>
 
   <script type="text/javascript" charset="utf-8">
-    zaisu.css.loader({
-      ios: "style/ios.css",
-      ipad: "style/ipad.css",
-      iphone: "style/iphone.css"
-    });
+    if(zaisu.util.is_ios()){
+      zaisu.css.loader({
+        ios: "style/ios.css",
+        ipad: "style/ipad.css",
+        iphone: "style/iphone.css"
+      });
+    }
 
     $.couch.app(function(app) {
-      $("#account").evently("account", app);
-      $.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
+      //$("#account").evently("account", app);
+      //$.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
 
       var docs = new howmm.docs("#docs", app);
       docs.index();

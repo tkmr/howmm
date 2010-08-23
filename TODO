@@ -1,17 +1,22 @@
-CouchApp:
- - buttonの表現が微妙 spanにする?
-   - clickをはでに
- - iPad系では dblclick が使えない
-   - show updated_at on the list
- - index => show のpartialか
- - ubuntu-vboxへのせる
- - autoresize no longtext 対応. (iphone)
+Feature:
+ - wiki link
+   - 全文検索
+   - keyword input
+   - auto link (by keyword)
+  = Ajaxで別ロジックで実装？
 
-
- - application cache (manifest)
+Todo:
  - Add localStorage cache
- - Use Arrow or JSDefferd
- - URI navigator with Pathbinder
+ - doc_message を float にして、自動で画面についてくるようにしたい (position:fix が使いたいぜ)
  -  _rev対応、historyみたい
  - iPad / iPhone 最適化 (UI)
 
+Checking:
+ -
+
+Pending:
+ - iPad か iPhone では textarea.focus() が動かないのかな？
+ - キーボードのショートカットが欲しい。(emacs like)
+ - オートセーブあってもいいかも 60秒間ごととか？
+ - Use Arrow or JSDefferd
+ - URI navigator with Pathbinder
