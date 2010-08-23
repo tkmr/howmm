@@ -21,3 +21,5 @@ vendor/couchapp/jquery.evently.js
 NETWORK:
 /howmm/_design/howmm
 /howmm/
+/howm/_design/howmm
+/howm/
