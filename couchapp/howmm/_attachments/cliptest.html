@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>clip test</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script src="vendor/couchapp/loader.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    $.couch.app(function(app) {
+      var message = function(text){
+        $("#message").append("<p>"+ text +"</p>");
+      }
+
+      var tmp = eval(localStorage.getItem("testkeyX") || "0");
+      message("LocalStorage: " + tmp);
+      localStorage.setItem("testkeyX", tmp + 1);
+
+      message(document.domain);
+      message(document.cookie.toString());
+      message(location.toString());
+    });
+    </script>
+  </head>
+  <body>
+    <div id="message"></div>
+  </body>
+</html>
