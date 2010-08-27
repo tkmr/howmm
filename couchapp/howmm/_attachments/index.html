@@ -54,6 +54,8 @@
   <script src="script/howmm.js"></script>
 
   <script type="text/javascript" charset="utf-8">
+  $.ready(function(){
+
     var init_proc = function(){
       if(zaisu.util.is_ios()){
         zaisu.css.loader({
@@ -74,5 +76,6 @@
     .next(init_proc)
     .run();
 
+  });
   </script>
 </html>
