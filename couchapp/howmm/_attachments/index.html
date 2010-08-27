@@ -3,10 +3,8 @@
   <head>
     <title>howmm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
-    <!--
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    -->
     <link rel="stylesheet" href="style/howmm.css" type="text/css">
   </head>
   <body>
@@ -29,7 +27,21 @@
     <div id="docs_message"></div>
 
     <div class="textright">
-      <div id="account"></div>
+      <div id="account">
+        <div class="login">
+          <div>
+            name: <input type="text" size="24" name="name" class="name">
+            pass: <input type="text" size="24" name="password" class="password">
+          </div>
+          <a href="#login" class="button">login</a>
+        </div>
+
+        <div class="logout">
+          name: <span class="name"></span>
+          <a href="#logout" class="button">logout</a>
+        </div>
+      </div>
+
       <div id="cssipad"></div>
       <div id="cssiphone"></div>
     </div>
@@ -37,24 +49,30 @@
   </body>
   <script src="vendor/couchapp/loader.js"></script>
   <script src="vendor/couchapp/jquery.pathbinder.js"></script>
+  <script src="script/arrow.js"></script>
   <script src="script/zaisu.js"></script>
   <script src="script/howmm.js"></script>
 
   <script type="text/javascript" charset="utf-8">
-    if(zaisu.util.is_ios()){
-      zaisu.css.loader({
-        ios: "style/ios.css",
-        ipad: "style/ipad.css",
-        iphone: "style/iphone.css"
+    var init_proc = function(){
+      if(zaisu.util.is_ios()){
+        zaisu.css.loader({
+          ios: "style/ios.css",
+          ipad: "style/ipad.css",
+          iphone: "style/iphone.css"
+        });
+      }
+
+      $.couch.app(function(app) {
+        var docs = new howmm.docs("#docs", app);
+        docs.index();
       });
-    }
+    };
 
-    $.couch.app(function(app) {
-      //$("#account").evently("account", app);
-      //$.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
+    (new howmm.account("#account"))
+    .check_login()
+    .next(init_proc)
+    .run();
 
-      var docs = new howmm.docs("#docs", app);
-      docs.index();
-    });
   </script>
 </html>

@@ -10,6 +10,7 @@ Todo:
  - doc_message を float にして、自動で画面についてくるようにしたい (position:fix が使いたいぜ)
  -  _rev対応、historyみたい
  - iPad / iPhone 最適化 (UI)
+ - Improve Arrow.error (and "name" override?)
 
 Checking:
  -

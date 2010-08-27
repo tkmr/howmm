@@ -6,7 +6,7 @@ var zaisu = {};
   Base.prototype.initialize = function(){};
   Base.prototype.log = console.log;
 
-  //klass
+  //klass----------------------------------------------
   var newclass = function(methods, superclass){
     var klass = function(){
       this.initialize.apply(this, arguments);
@@ -16,7 +16,7 @@ var zaisu = {};
     return klass;
   }
 
-  //Zaisu
+  //Zaisu util-----------------------------------------
   var util = {
     options_or_callback: function(options){
       //if input a function, wrap to {success: function(){....}}
@@ -75,7 +75,53 @@ var zaisu = {};
       });
     }
   };
+  za.util = util;
 
+  //Zaisu LocalStorage-------------------------------
+  za.LocalStorage = newclass({
+    initialize: function(name, options){
+      this.name = name;
+    },
+
+    //methods
+    init: function(callback){
+      //when use SQLDatabase.
+      callback();
+    },
+    get: function(key, callback){
+      key = this.name+"::"+key;
+      var val = localStorage.getItem(key);
+      callback(val);
+    },
+    put: function(key, value, callback){
+      key = this.name+"::"+key;
+      localStorage.setItem(key, value);
+      callback(true);
+    },
+
+    //arrow methods
+    initA: function(){
+      var self = this;
+      return Arrow.fromCPS(function(x, k){
+        self.init(k);
+      });
+    },
+    getA: function(key){
+      var self = this;
+      return Arrow.fromCPS(function(x, k){
+        self.get(key, k);
+      });
+    },
+    putA: function(key, value){
+      var self = this;
+      return Arrow.fromCPS(function(x, k){
+        self.put(key, (value || x), k);
+      });
+    }
+  });
+
+
+  //Zaisu DB-----------------------------------------
   za.DB = newclass({
     initialize: function(name, options){
       options = options || {};
@@ -100,6 +146,7 @@ var zaisu = {};
     }
   });
 
+  //Zaisu CSS-----------------------------------------
   za.css = {};
   za.css.loader = function(options){
     var load = function(name){
@@ -112,7 +159,5 @@ var zaisu = {};
       if(navigator.userAgent.search(/iPad/i) > -1) load(options.ipad);
     }
   }
-
-  za.util = util;
 
 })(zaisu);

@@ -127,6 +127,7 @@ h2 {
 /* -- account -- */
 #account {
   font-size: 90%;
+  padding: 8px;
 }
 
 #account p {

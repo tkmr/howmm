@@ -1,10 +1,14 @@
 CACHE MANIFEST
-#ver 1.02
+#ver 1.19
+
+CACHE:
 index.html
 style/howmm.css
 style/ios.css
 style/iphone.css
 style/ipad.css
+script/arrow.js
+script/jsdeferred.jquery.js
 script/zaisu.js
 script/howmm.js
 vendor/couchapp/loader.js
@@ -19,7 +23,12 @@ vendor/couchapp/jquery.evently.js
 /_utils/script/jquery.couch.js
 
 NETWORK:
+index.manifest
+/_session
 /howmm/_design/howmm
-/howmm/
 /howm/_design/howmm
-/howm/
+/howmm/_design/howmm/_view/
+/howm/_design/howmm/_view/
+/howmm
+/howm
+/this_is_control_25
