@@ -157,7 +157,7 @@ var zaisu = {};
       options.after = options.after || (function(){});
       var mode  = options.check_mode || "once";
       this.last_seq(function(){
-
+				
       });
     }
 
