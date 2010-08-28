@@ -89,22 +89,29 @@ var zaisu = {};
       options = options || {};
       this.name = name;
       this.init(options.after_init);
+      this.uniqkey = function(key){
+        return name+"::"+key;
+      }
     },
 
     //methods
     init: function(callback){
-      //when use SQLDatabase.
       callback = (callback || function(){});
       setTimeout(callback, 1);
     },
     get: function(key, callback){
-      key = this.name+"::"+key;
+      key = this.uniqkey(key);
       var val = localStorage.getItem(key);
       callback(val);
     },
     put: function(key, value, callback){
-      key = this.name+"::"+key;
+      key = this.uniqkey(key);
       localStorage.setItem(key, value);
+      callback(true);
+    },
+    remove: function(key, callback){
+      key = this.uniqkey(key);
+      localStorage.removeItem(key);
       callback(true);
     },
 
@@ -146,18 +153,28 @@ var zaisu = {};
       this.dname = options.design || za.util.design_name(options);
       this.offline = false;
     },
-    db: function(name, options){
-      var cdb = $.couch.db(name, options);
-      options = $.extend(options, {couch: cdb});
-      var zdb = new za.DB(name, options);
-      return $.extend(cdb, zdb);
-    },
     check_change: function(options, couch_options){
-      options       = options || {};
-      options.after = options.after || (function(){});
+      options   = options || {};
+      var after = options.after || (function(){});
       var mode  = options.check_mode || "once";
-      this.last_seq(function(){
-				
+      var self  = this;
+
+      var change_action = function(info){
+        //info.changes;
+        self.local.remove(info.id);
+        //Doc use//?
+      }
+
+      this.local
+      .getA("change::last_seq")
+      .next(function(last_seq){
+        var promise  = this.db.change(last_seq, couch_options);
+        promise.onChange(function(resp){
+          $.each(resp.results, function(){
+            if(last_seq < this.seq) last_seq = this.seq;
+          });
+          if(mode==="once") promise.stop();
+        });
       });
     }
 
@@ -182,6 +199,13 @@ var zaisu = {};
       this.db.saveDoc(obj, options);
     }
   });
+
+  za.DB.init = function(name, options){
+    var cdb = $.couch.db(name, options);
+    options = $.extend(options, {couch: cdb});
+    var zdb = new za.DB(name, options);
+    return $.extend(cdb, zdb);
+  };
 
   //Zaisu CSS-----------------------------------------
   za.css = {};
