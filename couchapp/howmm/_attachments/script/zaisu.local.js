@@ -2,7 +2,7 @@ var zaisu = zaisu || {};
 (function(za){
 
   //Zaisu LocalStorage-------------------------------
-  za.LocalStorage = newclass({
+  za.LocalStorage = za.newclass({
     initialize: function(name, options){
       options = options || {};
       this.name = name;

@@ -25,25 +25,11 @@ Arrow.prototype.callCPS = function(x, k) {
         this.cpsFunction = function(x, k) { return k(f(x)) };
     }
     try {
-        if(typeof(x)!=="object" || !x.is_long_error){
-          //default
-          this.cpsFunction(x, k);
-
-        }else{
-          if(this.is_long_error_catch){
-            //Catch a long error.
-            this.cpsFunction(x, k);
-
-          }else{
-            //Cann't catch a long error.
-            k(x);
-
-          }
-        }
+        this.cpsFunction(x, k);
     } catch (e) {
         console.log("CallCPS error! line:"+e.line+" url:"+e.sourceURL);
         console.log(e);
-        k(Arrow.LongError(e));
+        k(Arrow.Error(e));
     }
 }
 
@@ -305,28 +291,7 @@ Arrow.Value.In.prototype = new Arrow.Value;
 /*
  * Arrow.Error {{{
  */
-Arrow.Error     = Arrow.Value.In(1);
-Arrow.LongError = function(e){
-  return {
-    error: e,
-    is_long_error: true
-  }
-}
-
-Arrow.prototype.errors = function(f){
-  var fun = Arrow(f);
-  var arr = Arrow.fromCPS(function(x,k){
-    if(typeof(x)==="object" && x.is_long_error){
-      fun.next(k).run(x.Error);
-    }else{
-      k(x);
-    }
-  });
-
-  arr.is_long_error_catch = true;
-  return this['>>>'](arr);
-}
-
+Arrow.Error = Arrow.Value.In(1);
 /*
  * }}}
  */
@@ -434,7 +399,7 @@ jQuery.aAjax = function(options){
         k(options.before_success(resp));
       },
       error: function(resp){
-        k(Arrow.LongError(resp));
+        throw resp;
       }
     }, options));
   });
@@ -447,9 +412,10 @@ jQuery.aGetJSON = function(url, data){
     before_success: function(resp){
       var obj;
       try{
-        obj = zaisu.util.parseJSON(resp);
+        obj = eval("("+resp+")");
       }catch(e){
-        obj = Arrow.LongError(e);
+        debugger
+        obj = Arrow.Error;
       }
       return obj;
     }
@@ -464,7 +430,7 @@ Arrow.simpleCPS = function(cps){
 
 Arrow.Match = function(checker){
   return Arrow.fromCPS(function(x,k){
-    console.log("match check....");
+    console.log("mutch check....");
     if(checker(x)){
       k(x);
     }else{
@@ -472,39 +438,31 @@ Arrow.Match = function(checker){
     }
   });
 }
-Arrow.prototype.match = function(checker){
-  return this['>>>'](Arrow.Match(checker));
-}
+Arrow.prototype.match = Arrow.Math;
 
 Arrow.prototype.end = function(){
-  return this['>>>'](Arrow.Stop);
+  return Arrow.Stop;
 }
 
 Arrow.prototype.logger = function(message){
-  return this['>>>'](Arrow.fromCPS(function(x,k){
+  return Arrow.fromCPS(function(x,k){
     console.log("now logger..." + (message||""));
     console.log(x);
     k(x);
-  }));
+  });
 }
 
 Arrow.prototype.which = function(arrows){
   if(!(arrows.success && arrows.error)){
     throw "Error!! we need success and error"
   }
-  return this['>>>'](
+  return this.next(
     (Arrow(arrows.success))['+++'](Arrow(arrows.error))
   );
 }
 
-Arrow.WaitUntil = function(target, event_name){
+Arrow.Wait = function(target, event_name){
   return Arrow.simpleCPS(function(x, k){
     $(target).one(event_name, k);
   });
-}
-
-Arrow.prototype.wait_until = function(target, event_name){
-  return this['>>>'](
-    Arrow.WaitUntil(target, event_name)
-  );
 }

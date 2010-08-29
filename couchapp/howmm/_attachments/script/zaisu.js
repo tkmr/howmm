@@ -1,8 +1,10 @@
 var zaisu = zaisu || {};
 (function(za){
 
+  var util = za.util;
+
   //Zaisu Doc----------------------------------------
-  za.Doc = newclass({
+  za.Doc = za.newclass({
     initialize: function(doc, options){
       this.doc = doc;
       this.id  = options.id || doc._id;
@@ -10,7 +12,7 @@ var zaisu = zaisu || {};
   });
 
   //Zaisu DB-----------------------------------------
-  za.DB = newclass({
+  za.DB = za.newclass({
     initialize: function(name, options){
       options    = options || {};
       this.db    = options.couch  || jQuery.couch.db(name, options);
@@ -41,7 +43,7 @@ var zaisu = zaisu || {};
           if(mode==="once") promise.stop();
         });
       });
-    }
+    },
 
     //couch API
     view: function(name, options){

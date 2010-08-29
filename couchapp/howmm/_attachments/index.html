@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="index.manifest">
+<html manifest="indexNO.manifest">
   <head>
     <title>howmm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
@@ -28,6 +28,8 @@
 
     <div class="textright">
       <div id="account">
+        <div class="online_message"></div>
+
         <div class="login">
           <div>
             name: <input type="text" size="24" name="name" class="name">
@@ -50,11 +52,14 @@
   <script src="vendor/couchapp/loader.js"></script>
   <script src="vendor/couchapp/jquery.pathbinder.js"></script>
   <script src="script/arrow.js"></script>
+  <script src="script/zaisu.util.js"></script>
+  <script src="script/zaisu.local.js"></script>
+  <script src="script/zaisu.session.js"></script>
   <script src="script/zaisu.js"></script>
   <script src="script/howmm.js"></script>
 
   <script type="text/javascript" charset="utf-8">
-  $.ready(function(){
+  $("document").ready(function(){
 
     var init_proc = function(){
       if(zaisu.util.is_ios()){
@@ -65,17 +70,20 @@
         });
       }
 
+      console.log("now started howmm");
       $.couch.app(function(app) {
         var docs = new howmm.docs("#docs", app);
         docs.index();
       });
-    };
+    }
 
-    (new howmm.account("#account"))
-    .check_login()
-    .next(init_proc)
-    .run();
+    var session = zaisu.Session.current;
+    var account = new howmm.account("#account", session);
 
+    session
+      .aCheck_login
+      .next(init_proc)
+      .run();
   });
   </script>
 </html>

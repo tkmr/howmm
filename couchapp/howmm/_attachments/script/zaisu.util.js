@@ -3,15 +3,37 @@ var zaisu = zaisu || {};
 
   //class and instance---------------------------------------
   var Base = function(){};
-  Base.prototype.initialize = function(){};
-  Base.prototype.log = console.log;
+  Base.prototype['__initialize__'] = function(){};
+  Base.prototype['__log__']        = console.log;
+  Base.prototype['__bind__']       = function(name, handler){
+    $(this).bind(name, handler);
+  }
+  Base.prototype['__trigger__']    = function(name, params){
+    $(this).trigger(name, params);
+  }
 
-  var newclass = function(methods, superclass){
+  za.newclass = function(methods, superclass){
+    var superclass = superclass || Base;
+
+    var my_methods = {};
+    $.each(methods, function(key, value){
+      my_methods['__'+key+'__'] = value;
+    });
+
     var klass = function(){
+      var self = this;
+      var constr = this.constructor;
+
+      $.each(constr.prototype, function(key, value){
+        var name = key.match(/^__(.*)__$/)[1];
+        self[name] = function(){
+          return constr.prototype[key].apply(self, arguments);
+        }
+      });
+
       this.initialize.apply(this, arguments);
     }
-    superclass = superclass || Base;
-    jQuery.extend(klass.prototype, superclass.prototype, methods);
+    jQuery.extend(klass.prototype, superclass.prototype, my_methods);
     return klass;
   }
 
@@ -78,6 +100,12 @@ var zaisu = zaisu || {};
       var index     = urlPrefix.split('/').length;
       var fragments = unescape(document.location.href).split('/');
       return fragments[index + 4];
+    },
+    fork: function(func){
+      setTimeout((func || (function(){})), 1);
+    },
+    parseJSON: function(str){
+      return eval("("+str+")");
     }
   };
   za.util = util;
