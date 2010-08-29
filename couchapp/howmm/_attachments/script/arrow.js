@@ -443,8 +443,10 @@ Arrow.prototype.end = function(){
   return Arrow.Stop;
 }
 
-Arrow.prototype.logger = Arrow.simpleCPS(function(x,k){
-  console.log("now logger....");
-  console.log(x);
-  k(x);
-});
+Arrow.prototype.logger = function(message){
+  return Arrow.fromCPS(function(x,k){
+    console.log("now logger..." + (message||""));
+    console.log(x);
+    k(x);
+  });
+}

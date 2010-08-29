@@ -10,6 +10,8 @@ style/ipad.css
 script/arrow.js
 script/jsdeferred.jquery.js
 script/zaisu.js
+script/zaisu.util.js
+script/zaisu.local.js
 script/howmm.js
 vendor/couchapp/loader.js
 vendor/couchapp/jquery.pathbinder.js
