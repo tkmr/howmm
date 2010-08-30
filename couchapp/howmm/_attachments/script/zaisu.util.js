@@ -11,6 +11,12 @@ var zaisu = zaisu || {};
   Base.prototype['__trigger__']    = function(name, params){
     $(this).trigger(name, params);
   }
+  Base.prototype['__delegate__']   = function(base, names){
+    var self = this;
+    $.each(names, function(index, name){
+      self[name] = base[name];
+    });
+  }
 
   za.newclass = function(methods, superclass){
     var superclass = superclass || Base;

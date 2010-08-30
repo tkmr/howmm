@@ -25,7 +25,7 @@ Arrow.prototype.callCPS = function(x, k) {
         this.cpsFunction = function(x, k) { return k(f(x)) };
     }
     try {
-        if(typeof(x)!=="object" || !x.is_long_error){
+        if(x === null || typeof(x)!=="object" || !x.is_long_error){
           //default
           this.cpsFunction(x, k);
 

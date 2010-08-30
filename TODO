@@ -1,11 +1,22 @@
+Important:
+ - zaisu.DB.saveDoc のconflict対策.. (message alert?)
+
 Feature:
  - wiki link
    - 全文検索
    - keyword input
    - auto link (by keyword)
-  = Ajaxで別ロジックで実装？
+     = Ajaxで別ロジックで実装？
+
+ - LocalCache (Long polling _change check)
+ - EditのTrigger（iPhone系と分ける、文字サイズなどは極力同じにする）
+ - UI (サイズ、一行目をリンクに、時刻は見やすく、H2 や A など、preとoverflow）
+ - 全文検索
+ - Timezone
+ - Geolocation
 
 Todo:
+ - Spec
  - Add localStorage cache
  - doc_message を float にして、自動で画面についてくるようにしたい (position:fix が使いたいぜ)
  -  _rev対応、historyみたい
