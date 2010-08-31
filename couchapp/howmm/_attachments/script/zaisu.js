@@ -41,7 +41,13 @@ var zaisu = zaisu || {};
       this.dname = options.design || za.util.design_name(options);
       this.offline = false;
 
-      //Delegate to Couch API;
+      //Delegate to Couch API
+      this.db.urlPrefix = "";
+      this.urlPrefix = this.db.urlPrefix;
+      this.name      = this.db.name;
+      this.db.uri    = this.urlPrefix+"/"+encodeURIComponent(this.name)+"/"
+      this.uri       = this.db.uri;
+
       this.delegate(this.db, [
         'name', 'uri', 'compact', 'viewCleanup', 'compactView',
         'create', 'drop', 'info', 'changes', 'allDocs',
@@ -154,7 +160,7 @@ var zaisu = zaisu || {};
     get_cache_doc: function(doc_id, callback){
       callback = callback || (function(){});
       this.local.get(za.Doc.key(doc_id), function(val){
-        callback(val.doc());
+        (val == null) ? callback(val) : callback(val.doc());
       });
     },
     set_cache_doc: function(obj, callback){
@@ -221,8 +227,9 @@ var zaisu = zaisu || {};
     }
   });
 
+  var couch_db = $.couch.db;
   za.DB.init = function(name, options){
-    var cdb = $.couch.db(name, options);
+    var cdb = couch_db(name, options);
     options = $.extend(options, {couch: cdb});
     return (new za.DB(name, options));
   };

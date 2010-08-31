@@ -2,7 +2,8 @@ var howmm = {util: {}};
 (function(){with(Arrow){
 
   var dbname = location.toString().match(/\/(howmm?)\//)[1];
-  howmm.db = zaisu.DB.init(dbname);
+  howmm.db   = zaisu.DB.init(dbname);
+  $.couch.db = zaisu.DB.init;
 
   howmm.docs = function(element, app){
     $(element).evently("docs", app);

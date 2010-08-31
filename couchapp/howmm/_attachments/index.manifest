@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#ver 1.19
+#ver 1.20
 
 CACHE:
 index.html
@@ -8,8 +8,8 @@ style/ios.css
 style/iphone.css
 style/ipad.css
 script/arrow.js
-script/jsdeferred.jquery.js
 script/zaisu.js
+script/zaisu.session.js
 script/zaisu.util.js
 script/zaisu.local.js
 script/howmm.js
@@ -25,12 +25,12 @@ vendor/couchapp/jquery.evently.js
 /_utils/script/jquery.couch.js
 
 NETWORK:
-index.manifest
+#index.manifest
 /_session
 /howmm/_design/howmm
-/howm/_design/howmm
 /howmm/_design/howmm/_view/
-/howm/_design/howmm/_view/
 /howmm
+/howm/_design/howmm
+/howm/_design/howmm/_view/
 /howm
-/this_is_control_25
+/this_is_control_26
