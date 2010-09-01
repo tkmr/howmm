@@ -2,37 +2,80 @@ var zaisu = zaisu || {};
 (function(za){
   var util = za.util;
 
-  //Zaisu Doc----------------------------------------
-  za.Doc = za.newclass({
-    initialize: function(doc, options){
-      options = options || {};
-      var type = 'zaisu.doc';
-      this._value = {doc: doc, type: type};
-      this.type   = type;
-    },
-    id: function(){
-      return this._value.doc._id;
-    },
-    key: function(){
-      return za.Doc.key(this.id());
-    },
-    value: function(){
-      return this._value;
-    },
-    doc: function(){
-      return this.value().doc;
-    }
-  });
-  za.Doc.key = function(id){
-    return ('doc::' + id);
-  }
-  za.Doc.init = function(obj){
-    var doc = new za.Doc({});
-    doc._value = obj;
-    return doc;
+  //Consts-------------------------------------------
+  var KEYS= {
+    CHANGE_LAST_SEQ: "change_last_seq_num"
+    DOC_ENTRIES: 'docs_cached_entries',
   }
 
-  //Zaisu DB-----------------------------------------
+  //Zaisu Doc----------------------------------------
+  za.DocBase = function(type_name){
+    var klass = za.newclass({
+      initialize: function(doc, options){
+        doc = doc || {};
+        options = options || {};
+        this._value = {doc: doc, type: type_name};
+        this.type   = type_name;
+      },
+      id: function(){
+        return this._value.doc._id;
+      },
+      key: function(){
+        return (type_name + '::' + this.id());
+      },
+      value: function(){
+        return this._value;
+      },
+      doc: function(){
+        return this.value().doc;
+      }
+    });
+
+    klass.key = function(id){
+      return (type_name + '::' + id);
+    }
+    klass.init = function(obj){
+      var doc = new klass();
+      doc._value = obj;
+      return doc;
+    }
+    return klass
+  }
+  za.Doc        = za.DocBase('zaisu::doc');
+  za.DocEntries = za.DocBase('zaisu::doc_entries');
+
+
+  //Zaisu LDS----------------------------------------
+  za.LocalDocStore = za.newclass({
+    initialize: function(doc_class){
+      this.local     = new za.LocalStorage("ldoc_store::");
+      this.doc_class = doc_class;
+    },
+    get: function(doc_id, callback){
+      callback = callback || (function(){});
+      this.local.get(this.doc_class.key(doc_id), function(val){
+        (val == null) ? callback(val) : callback(val.doc());
+      });
+    },
+    put: function(obj, callback){
+      callback = callback || (function(){});
+      var doc  = new this.doc_class(obj);
+
+      this.local
+        .getA(KEYS.DOC_ENTRIES)
+        .next(function(docs){
+          docs.
+        })
+
+      this.local.put(doc.key(), doc, callback);
+    },
+    remove: function(doc_id, callback){
+      callback = callback || (function(){});
+      this.local.remove(this.doc_class.key(doc_id), callback);
+    },
+  });
+
+  //Zaisu DB--------------------------------------------
   za.DB = za.newclass({
     initialize: function(name, options){
       options    = options || {};
@@ -47,7 +90,6 @@ var zaisu = zaisu || {};
       this.name      = this.db.name;
       this.db.uri    = this.urlPrefix+"/"+encodeURIComponent(this.name)+"/"
       this.uri       = this.db.uri;
-
       this.delegate(this.db, [
         'name', 'uri', 'compact', 'viewCleanup', 'compactView',
         'create', 'drop', 'info', 'changes', 'allDocs',
@@ -156,23 +198,6 @@ var zaisu = zaisu || {};
       this.db.view(name, ext_options);
     },
 
-    //Cache---------------------------------------------
-    get_cache_doc: function(doc_id, callback){
-      callback = callback || (function(){});
-      this.local.get(za.Doc.key(doc_id), function(val){
-        (val == null) ? callback(val) : callback(val.doc());
-      });
-    },
-    set_cache_doc: function(obj, callback){
-      callback = callback || (function(){});
-      var doc  = new za.Doc(obj);
-      this.local.put(doc.key(), doc, callback);
-    },
-    clear_cache_doc: function(doc_id, callback){
-      callback = callback || (function(){});
-      this.local.remove(za.Doc.key(doc_id), callback);
-    },
-
     //original API--------------------------------------
     conflict_result: function(obj, options){
       console.log("now conflict result...");
@@ -214,14 +239,14 @@ var zaisu = zaisu || {};
         return changes;
       }
 
-      this.local.get("change::last_seq", function(last_seq){
+      this.local.get(KEYS.CHANGE_LAST_SEQ , function(last_seq){
         var promise  = this.db.change(last_seq, couch_options);
         promise.onChange(function(resp){
           if(mode==="once") promise.stop();
 
           var changes = compact_changes(resp.results);
           $.each(changes, change_action);
-          self.local.put("change::last_seq", resp.last_seq);
+          self.local.put(KEYS.CHANGE_LAST_SEQ, resp.last_seq);
         });
       });
     }
