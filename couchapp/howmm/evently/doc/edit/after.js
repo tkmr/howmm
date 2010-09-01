@@ -27,7 +27,7 @@ function(){
       howmm.db.saveDoc(doc, function(save_resp) {
         howmm.util.message("saved doc!!", self);
         if(switch_to_show){
-          setTimeout(function(){ go_to_show(save_resp) }, 600);
+          setTimeout(function(){ go_to_show(save_resp) }, 100);
         }
       });
     }

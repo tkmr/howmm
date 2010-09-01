@@ -3,17 +3,6 @@ var zaisu = zaisu || {};
   var util = za.util;
   var KEYS = za.Keys;
 
-  var compact_changes = function(resp_results){
-    var changes = {};
-    $.each(resp_results, function(index, value){
-      var id = value.id;
-      if(changes[id] == null || (changes[id].seq < value.seq)){
-        changes[id] = value;
-      }
-    });
-    return changes;
-  }
-
   //Zaisu DB--------------------------------------------
   za.DB = za.newclass({
     initialize: function(name, options){
@@ -21,6 +10,7 @@ var zaisu = zaisu || {};
       this.db       = options.couch  || jQuery.couch.db(name, options);
       this.cache    = new za.LocalDocStore(za.Doc);
       this.local_db = new za.LocalStorage("zaisu::db");
+      this.sync     = new za.Sync(this);
       this.dname    = options.design || za.util.design_name(options);
       this.offline  = false;
 
@@ -38,7 +28,7 @@ var zaisu = zaisu || {};
       ]);
     },
 
-    //couch API--------------------------------------
+    //Open ----------------------------------------
     openDoc: function(id, options, ajaxOptions){
       console.log("now openDoc..." + id);
       options  = util.options_or_callback(options);
@@ -53,23 +43,38 @@ var zaisu = zaisu || {};
                 : self.db.openDoc(id, ext_options, ajaxOptions));
       });
     },
+
+    //Save ----------------------------------------
     saveDoc: function(obj, options){
       console.log("now saveDoc..." + obj._id);
-      options  = util.options_or_callback(options);
+      options = util.options_or_callback(options);
+      options.cache_only = (options.cache_only != null) ? options.cache_only : true;
       var self = this;
 
-      var ext_options = $.extend({}, options, {
-        success: self.saveDoc_success(obj, options),
-        error:   self.saveDoc_error(obj, options)
-      });
-      this.db.saveDoc(obj, ext_options);
+      if(options.cache_only){
+        //Put to cache only
+        this.cache.put(obj, {synced:false}, function(obj){
+          options.success({ok: true, id: obj._id, rev: obj._rev});
+        });
+
+      }else{
+        //Put to CouchDB
+        var ext_options = $.extend({}, options, {
+          success: self.saveDoc_success(obj, options),
+          error:   self.saveDoc_error(obj, options)
+        });
+        this.db.saveDoc(obj, ext_options);
+
+      }
     },
     saveDoc_success: function(obj, options){
       var self = this;
       return function(resp){
         obj._rev = resp.rev;
         obj._id  = resp.id;
-        self.cache.put(obj, {synced: true}, function(){ options.success(resp) });
+        self.cache.put(obj, {synced: true}, function(){
+          options.success(resp);
+        });
       }
     },
     saveDoc_error: function(obj, options){
@@ -85,30 +90,21 @@ var zaisu = zaisu || {};
         }
       }
     },
-    bulkSave: function(docs, options) {
-      console.log("now bulkSave...");
-      options = util.options_or_callback(options);
-
-      this.db.bulkSave(docs, options);
+    saveDoc_error_409: function(obj, options){
+      //conflict_result
+      console.log("now conflict result...");
+      var self = this;
+      this.db.openDoc(obj._id, {
+        success: function(data){
+          data.body       = obj.body;
+          data.updated_at = obj.updated_at;
+          self.saveDoc(data, options);
+        },
+        error: options.error
+      });
     },
-    removeDoc: function(doc, options) {
-      console.log("now removeDoc...");
-      options = util.options_or_callback(options);
 
-      this.db.removeDoc(doc, options);
-    },
-    bulkRemove: function(docs, options) {
-      console.log("now bulkRemove...");
-      options = util.options_or_callback(options);
-
-      this.db.bulkRemove(docs, options);
-    },
-    list: function(list, view, options) {
-      console.log("now list...");
-      options = util.options_or_callback(options);
-
-      this.db.list(list, view, options);
-    },
+    //View-----------------------------------
     view: function(name, options){
       console.log("now view..." + name);
       options = util.options_or_callback(options);
@@ -139,50 +135,29 @@ var zaisu = zaisu || {};
     },
 
     //original API--------------------------------------
-    saveDoc_error_409: function(obj, options){
-      //conflict_result
-      console.log("now conflict result...");
-      var self = this;
-      this.db.openDoc(obj._id, {
-        success: function(data){
-          data.body       = obj.body;
-          data.updated_at = obj.updated_at;
-          self.saveDoc(data, options);
-        },
-        error: options.error
-      });
+    bulkSave: function(docs, options) {
+      console.log("now bulkSave...");
+      options = util.options_or_callback(options);
+
+      this.db.bulkSave(docs, options);
     },
-    check_change: function(options, couch_options){
-      couch_options = couch_options || {};
-      couch_options.feed = couch_options.feed || "normal";
+    removeDoc: function(doc, options) {
+      console.log("now removeDoc...");
+      options = util.options_or_callback(options);
 
-      options   = options || {};
-      var after = options.after || (function(){});
-      var mode  = options.check_mode || "once";
-      var self  = this;
+      this.db.removeDoc(doc, options);
+    },
+    bulkRemove: function(docs, options) {
+      console.log("now bulkRemove...");
+      options = util.options_or_callback(options);
 
-      this.local_db.get(KEYS.CHANGE_LAST_SEQ , function(last_seq){
-        var promise  = self.db.changes(last_seq, couch_options);
-        promise.onChange(function(resp){
-          if(mode==="once") promise.stop();
-          var changes = compact_changes(resp.results);
+      this.db.bulkRemove(docs, options);
+    },
+    list: function(list, view, options) {
+      console.log("now list...");
+      options = util.options_or_callback(options);
 
-          $.each(changes, function(index, info){
-            self.cache.get(info.id, function(obj){
-              var c = info.changes[0];
-
-              //If cached old version or not cached.
-              if(obj == null || obj._rev !== c.rev){
-                self.cache.remove(info.id, function(){
-                  self.openDoc(info.id);
-                });
-              }
-            });
-          });
-
-          self.local_db.put(KEYS.CHANGE_LAST_SEQ, resp.last_seq);
-        });
-      });
+      this.db.list(list, view, options);
     }
   });
 

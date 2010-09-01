@@ -59,6 +59,7 @@
   <script src="script/zaisu.doc.js"></script>
   <script src="script/zaisu.local.js"></script>
   <script src="script/zaisu.session.js"></script>
+  <script src="script/zaisu.sync.js"></script>
   <script src="script/zaisu.js"></script>
   <script src="script/howmm.js"></script>
 
@@ -84,7 +85,7 @@
     var account = new howmm.account("#account", session);
 
     //UI
-    $("a.to_sync").click(howmm.db.check_change);
+    $("a.to_sync").click(howmm.db.sync.sync_run);
 
     session
       .aCheck_login

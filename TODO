@@ -1,6 +1,10 @@
 Important:
  - zaisu.DB.saveDoc のconflict対策.. (message alert?)
  - new object PUTのテスト (_id)
+ - change to bulkSave
+ - Spec
+ - error logic for LocalStorage
+ - optionsのmix
 
 Feature:
  - wiki link
