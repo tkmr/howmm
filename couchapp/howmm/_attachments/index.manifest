@@ -9,6 +9,7 @@ style/iphone.css
 style/ipad.css
 script/arrow.js
 script/zaisu.js
+script/zaisu.doc.js
 script/zaisu.session.js
 script/zaisu.util.js
 script/zaisu.local.js

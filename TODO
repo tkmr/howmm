@@ -1,5 +1,6 @@
 Important:
  - zaisu.DB.saveDoc のconflict対策.. (message alert?)
+ - new object PUTのテスト (_id)
 
 Feature:
  - wiki link

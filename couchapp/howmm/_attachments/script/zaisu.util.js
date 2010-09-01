@@ -1,5 +1,12 @@
 var zaisu = zaisu || {};
 (function(za){
+  //Consts-------------------------------------------
+  za.Keys = {
+    CHANGE_LAST_SEQ   : "change_last_seq_num",
+    DOC_ENTRIES       : 'meta::docs_entries',
+    DOC_CLASS         : 'zaisu::doc',
+    DOC_ENTRIES_CLASS : 'zaisu::doc_entries'
+  };
 
   //class and instance---------------------------------------
   var Base = function(){};
@@ -47,10 +54,13 @@ var zaisu = zaisu || {};
   var util = {
     options_or_callback: function(options){
       //if input a function, wrap to {success: function(){....}}
+      options = options || {};
       if(typeof(options) === 'function'){
         options = util.to_callback(options);
       }
-      return (options || {});
+      options.success = options.success || (function(){});
+      options.error   = options.error   || (function(){});
+      return options;
     },
     to_callback: function(func){
       return {

@@ -7,7 +7,6 @@ function(){
     $(self).trigger('edit', [ {id: id} ]);
   }
 
-  $(self).find("a.go_edit").click(function(){
-    go_to_edit();
-  });
+  $(self).find("a.go_edit").click(go_to_edit);
+  $(self).find("p.docs_body").dblclick(go_to_edit);
 }

@@ -1,5 +1,7 @@
 var zaisu = zaisu || {};
 (function(za){
+  var util = za.util;
+  var KEYS = za.Keys;
 
   //Zaisu LocalStorage-------------------------------
   za.LocalStorage = za.newclass({
@@ -10,9 +12,7 @@ var zaisu = zaisu || {};
       this.uniqkey = function(key){
         return name+"::"+key;
       }
-      this.type_map = {
-        'zaisu.doc': za.Doc
-      }
+      this.type_map = za.DocTypeMap;
     },
 
     //methods
@@ -32,6 +32,7 @@ var zaisu = zaisu || {};
 
     //get / put / remove to the storage
     get: function(key, callback){
+      callback = (callback || function(){});
       key = this.uniqkey(key);
       var val = localStorage.getItem(key);
 
@@ -41,6 +42,7 @@ var zaisu = zaisu || {};
       callback(val);
     },
     put: function(key, value, callback){
+      callback = (callback || function(){});
       key = this.uniqkey(key);
 
       if(typeof(value) === 'object'){
@@ -49,7 +51,14 @@ var zaisu = zaisu || {};
       localStorage.setItem(key, value);
       callback(true);
     },
+    update: function(key, update_func, after_func){
+      var self = this;
+      this.get(key, function(val){
+        self.put(key, update_func(val), after_func);
+      });
+    },
     remove: function(key, callback){
+      callback = (callback || function(){});
       key = this.uniqkey(key);
       localStorage.removeItem(key);
       callback(true);
