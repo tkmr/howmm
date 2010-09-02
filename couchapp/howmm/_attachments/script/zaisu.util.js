@@ -63,10 +63,7 @@ var zaisu = zaisu || {};
       return options;
     },
     to_callback: function(func){
-      return {
-        success: func,
-        error: alert
-      };
+      return {success: func};
     },
     extend_rows: function(rows, extend_func){
       var res = [];

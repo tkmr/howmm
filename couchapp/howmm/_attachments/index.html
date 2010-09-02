@@ -66,31 +66,27 @@
   <script type="text/javascript" charset="utf-8">
   $("document").ready(function(){
 
-    var init_proc = function(){
-      if(zaisu.util.is_ios()){
-        zaisu.css.loader({
-          ios: "style/ios.css",
-          ipad: "style/ipad.css",
-          iphone: "style/iphone.css"
-        });
-      }
-      $.couch.app(function(app) {
-        var docs = new howmm.docs("#docs", app);
-        docs.index();
+    //load CSS
+    if(zaisu.util.is_ios()){
+      zaisu.css.loader({
+        ios: "style/ios.css", ipad: "style/ipad.css", iphone: "style/iphone.css"
       });
     }
 
-    //Controller
+    //Session service
     var session = zaisu.Session.current;
     var account = new howmm.account("#account", session);
+    //session.aCheck_login.next(init_proc).run();
 
-    //UI
+    //Sync service
     $("a.to_sync").click(howmm.db.sync.sync_run);
 
-    session
-      .aCheck_login
-      .next(init_proc)
-      .run();
+    //Start CouchApp
+    $.couch.app(function(app) {
+      var docs = new howmm.docs("#docs", app);
+      docs.index();
+    });
+
   });
   </script>
 </html>

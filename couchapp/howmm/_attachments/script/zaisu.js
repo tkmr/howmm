@@ -33,15 +33,74 @@ var zaisu = zaisu || {};
       console.log("now openDoc..." + id);
       options  = util.options_or_callback(options);
       var self = this;
-      var ext_options = $.extend({}, options, {success: function(obj){
+      var cache_got_doc = function(obj){
         self.cache.put(obj, {synced: true}, options.success);
-      }});
+      }
 
       this.cache.get(id, function(obj){
-        return ((obj != null)
-                ? options.success(obj)
-                : self.db.openDoc(id, ext_options, ajaxOptions));
+        if(obj != null){
+          //Get from cache-----------------------
+          options.success(obj);
+
+        }else{
+          //Get from CouchDB---------------------
+          var opts = $.extend({}, options, { success: cache_got_doc });
+          self.couch_call('openDoc', [id, opts, ajaxOptions]);
+
+        }
       });
+    },
+
+    couch_call: function(method, params, options_num){
+      options_num   = options_num || 2;
+      var org_error = params[options_num - 1].error;
+      var self      = this;
+      var error_num = 0;
+
+      (function(){
+        var more = arguments.callee;
+        params[options_num - 1].error = function(status, error, reason){
+          error_num++;
+          if(error_num < 4){
+            self.couch_error(more, org_error, status, error, reason);
+          }else{
+            org_error.apply(self, arguments);
+          }
+        }
+        self.db[method].apply(self.db, params);
+      })();
+    },
+    couch_error: function(fix_success, fix_error, status, error, reason){
+      var self = this;
+      var session = za.Session.current;
+      var call_fix_error = function(x, callback){
+        fix_error(status, error, reason);
+        ( callback || (function(){}) )();
+      }
+
+      var error_map = {
+        '0': function(){
+          //The document could not be retrieved
+          throw 'This connection is Offline';
+
+        },
+        '401': function(){
+          //Unauthorized
+          session
+            .aLogin
+            .next(fix_success)
+            .errors(call_fix_error)
+            .run();
+        },
+        '409': function(){
+          //Conflicted
+          //
+          //TODO
+        }
+      }
+      return (error_map[status.toString()]
+              ? error_map[status.toString()]()
+              : call_fix_error());
     },
 
     //Save ----------------------------------------
@@ -52,18 +111,23 @@ var zaisu = zaisu || {};
       var self = this;
 
       if(options.cache_only){
-        //Put to cache only
+        //Put to cache only-------------------------------------
         this.cache.put(obj, {synced:false}, function(obj){
           options.success({ok: true, id: obj._id, rev: obj._rev});
         });
 
       }else{
-        //Put to CouchDB
+        //Put to CouchDB-----------------------------------------
+        this.db.saveDoc(obj, $.extend({}, options, {
+          success: self.saveDoc_success(obj, options),
+          error:   self.saveDoc_error(obj, options)
+        }));
+
         var ext_options = $.extend({}, options, {
           success: self.saveDoc_success(obj, options),
           error:   self.saveDoc_error(obj, options)
         });
-        this.db.saveDoc(obj, ext_options);
+        this.couch_call('saveDoc', [obj, ext_options]);
 
       }
     },
@@ -79,7 +143,7 @@ var zaisu = zaisu || {};
     },
     saveDoc_error: function(obj, options){
       var self = this;
-      return function(status_code){
+      return function(status_code, error, reason){
         options.error_count = (options.error_count || 0) + 1;
         var func_name = 'saveDoc_error' + status_code;
 

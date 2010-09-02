@@ -1,10 +1,8 @@
 Important:
+ - SyncがにじゅうPOST? /PUT /PUT
+ - Sync.push_changes を bulkSave にする ( POST /_session にもcarefull）
+ - Spec for couch_error
  - zaisu.DB.saveDoc のconflict対策.. (message alert?)
- - new object PUTのテスト (_id)
- - change to bulkSave
- - Spec
- - error logic for LocalStorage
- - optionsのmix
 
 Feature:
  - wiki link
@@ -21,7 +19,7 @@ Feature:
  - Geolocation
 
 Todo:
- - Spec
+ - optionsのmix
  - Add localStorage cache
  - doc_message を float にして、自動で画面についてくるようにしたい (position:fix が使いたいぜ)
  -  _rev対応、historyみたい
@@ -32,6 +30,7 @@ Checking:
  -
 
 Pending:
+ - error logic for LocalStorage
  - iPad か iPhone では textarea.focus() が動かないのかな？
  - キーボードのショートカットが欲しい。(emacs like)
  - オートセーブあってもいいかも 60秒間ごととか？
