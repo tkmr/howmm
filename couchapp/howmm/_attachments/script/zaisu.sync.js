@@ -34,6 +34,7 @@ var zaisu = zaisu || {};
     push_changes: function(options, callback){
       callback = (callback || function(){});
       var db   = this.db;
+      console.log('push change run...');
 
       db.cache.local.get(KEYS.DOC_ENTRIES, function(docs){
         docs = docs || {};

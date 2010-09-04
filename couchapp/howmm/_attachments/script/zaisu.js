@@ -88,14 +88,10 @@ var zaisu = zaisu || {};
           //Unauthorized
           session
             .aLogin
+            .wait(600)
             .next(fix_success)
             .errors(call_fix_error)
             .run();
-        },
-        '409': function(){
-          //Conflicted
-          //
-          //TODO
         }
       }
       return (error_map[status.toString()]
@@ -118,11 +114,6 @@ var zaisu = zaisu || {};
 
       }else{
         //Put to CouchDB-----------------------------------------
-        this.db.saveDoc(obj, $.extend({}, options, {
-          success: self.saveDoc_success(obj, options),
-          error:   self.saveDoc_error(obj, options)
-        }));
-
         var ext_options = $.extend({}, options, {
           success: self.saveDoc_success(obj, options),
           error:   self.saveDoc_error(obj, options)
@@ -144,10 +135,9 @@ var zaisu = zaisu || {};
     saveDoc_error: function(obj, options){
       var self = this;
       return function(status_code, error, reason){
-        options.error_count = (options.error_count || 0) + 1;
-        var func_name = 'saveDoc_error' + status_code;
-
-        if(options.error_count < 3 && self[func_name]){
+        debugger;
+        var func_name = 'saveDoc_error_' + status_code;
+        if(self[func_name]){
           self[func_name](obj, options);
         }else{
           options.error(status_code);
@@ -178,7 +168,7 @@ var zaisu = zaisu || {};
       var ext_options = $.extend({}, options, {
         success: this.view_success(options)
       });
-      this.db.view(name, ext_options);
+      this.couch_call('view', [name, ext_options]);
     },
     view_success: function(options){
       var self = this;

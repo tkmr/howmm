@@ -76,7 +76,8 @@ var zaisu = zaisu || {};
         self.local.update(KEYS.DOC_ENTRIES, function(docs){
           docs = docs || {};
           docs[doc.id()] = {
-            updated_at: (new Date()),
+            cached_at: (new Date()),
+            updated_at: doc.doc().updated_at,
             synced: (options.synced || false),
             rev: doc.rev()
           };

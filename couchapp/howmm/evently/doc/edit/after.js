@@ -27,9 +27,13 @@ function(){
       howmm.db.saveDoc(doc, function(save_resp) {
         howmm.util.message("saved doc!!", self);
         if(switch_to_show){
-          setTimeout(function(){ go_to_show(save_resp) }, 100);
+          setTimeout(function(){ go_to_show(save_resp) }, 0);
         }
       });
+
+    }else if((textarea[0].value.length > 0) && old_data){
+      go_to_show({id: old_data._id});
+
     }
   };
 

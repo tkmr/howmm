@@ -49,9 +49,16 @@ var zaisu = zaisu || {};
         value = this.serialize(value);
       }
       localStorage.setItem(key, value);
-      callback(true);
+      try{
+        callback(true);
+      }catch(e){
+        console.log(e);
+        return false;
+      }
     },
     update: function(key, update_func, after_func){
+      update_func = (update_func || function(){ return (function(){}); });
+      after_func  = (after_func  || function(){ return (function(){}); });
       var self = this;
       this.get(key, function(val){
         self.put(key, update_func(val), after_func);

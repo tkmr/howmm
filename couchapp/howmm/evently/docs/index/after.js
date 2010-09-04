@@ -9,7 +9,6 @@ function(){
     return doc;
   }
 
-
   //new window hack (re-cycle)
   var temp = {};
   temp.init = function(){

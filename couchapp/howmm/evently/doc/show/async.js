@@ -1,5 +1,5 @@
 function(callback, e, params){
-  if(!params.id && params._id && params._rev){
+  if(!params.id && params._id && params.body){
     // params is a document of CouchDB
     callback(params);
 

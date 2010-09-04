@@ -2,6 +2,7 @@
 <html manifest="indexNO.manifest">
   <head>
     <title>howmm</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -66,6 +67,9 @@
   <script type="text/javascript" charset="utf-8">
   $("document").ready(function(){
 
+    //remove Cahce
+    howmm.db.cache.remove('_design/howmm', console.log);
+
     //load CSS
     if(zaisu.util.is_ios()){
       zaisu.css.loader({
@@ -84,7 +88,7 @@
     //Start CouchApp
     $.couch.app(function(app) {
       var docs = new howmm.docs("#docs", app);
-      docs.index();
+      docs.local_index();
     });
 
   });

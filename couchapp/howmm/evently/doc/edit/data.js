@@ -5,5 +5,15 @@ function(doc){
   }
 
   $$(this).data = doc;
-  return doc;
+
+  if(doc.updated_at){
+    var d = zaisu.util.parseDate(doc.updated_at);
+    return $.extend({}, doc, {
+      updated_at_str: (d.year+'/'+d.month+'/'+d.date+' ('+d.day+') '+d.hours+':'+d.minutes)
+    });
+
+  }else{
+    return doc;
+
+  }
 }

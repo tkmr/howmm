@@ -1,35 +1,31 @@
 Important:
+ - AutoSync (save / open / tou? さらにlocal_indexを呼ぶ)
+ - Stop _change/ feed=long_poll を
+ - localStorage の容量オーバー対策
  - SyncがにじゅうPOST? /PUT /PUT
- - Sync.push_changes を bulkSave にする ( POST /_session にもcarefull）
+ - wiki link (全文検索)
+ - Geolocation
+ - Timezone
+
  - Spec for couch_error
  - zaisu.DB.saveDoc のconflict対策.. (message alert?)
 
-Feature:
- - wiki link
-   - 全文検索
-   - keyword input
-   - auto link (by keyword)
-     = Ajaxで別ロジックで実装？
-
- - LocalCache (Long polling _change check)
- - EditのTrigger（iPhone系と分ける、文字サイズなどは極力同じにする）
- - UI (サイズ、一行目をリンクに、時刻は見やすく、H2 や A など、preとoverflow）
- - 全文検索
- - Timezone
- - Geolocation
-
-Todo:
- - optionsのmix
- - Add localStorage cache
- - doc_message を float にして、自動で画面についてくるようにしたい (position:fix が使いたいぜ)
  -  _rev対応、historyみたい
  - iPad / iPhone 最適化 (UI)
- - Improve Arrow.error (and "name" override?)
+ - UI (サイズ、一行目をリンクに、時刻は見やすく、H2 や A など、preとoverflow）
+ - EditのTrigger（iPhone系と分ける、文字サイズなどは極力同じにする）
 
-Checking:
- -
+switch production:
+ - index.manifest
+ - remove [ howmm.db.cache.remove('_design/howmm', console.log); ]
+
 
 Pending:
+ - keyword input
+ - Arrowの設計を見直し
+ - optionsのmix (query stringにつく)
+ - doc_messageをfloatにして、自動で画面についてくるようにしたい (モーダルウィンドウ)
+ - Sync.push_changes を bulkSave にする ( POST /_session にもcarefull）
  - error logic for LocalStorage
  - iPad か iPhone では textarea.focus() が動かないのかな？
  - キーボードのショートカットが欲しい。(emacs like)

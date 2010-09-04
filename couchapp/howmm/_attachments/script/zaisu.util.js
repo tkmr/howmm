@@ -119,6 +119,23 @@ var zaisu = zaisu || {};
     },
     parseJSON: function(str){
       return eval("("+str+")");
+    },
+    parseDate: function(time){
+      var week = ["日", "月", "火", "水", "木", "金", "土"];
+      var time = time.replace(/(-)/g, "/")
+        .replace("T", " ")
+        .replace("Z", " +0000")
+        .replace(/(\d*\:\d*:\d*)\.\d*/g,"$1");
+      var d = new Date(time);
+      return {
+        year:     d.getFullYear(),
+        month:    d.getMonth(),
+        date:     d.getDate(),
+        day:      week[d.getDay()],
+        hours:    d.getHours(),
+        minutes:  d.getMinutes(),
+        secounds: d.getSeconds()
+      }
     }
   };
   za.util = util;

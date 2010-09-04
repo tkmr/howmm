@@ -1,11 +1,13 @@
 var howmm = {util: {}};
 (function(){with(Arrow){
+  var KEYS   = zaisu.Keys;
 
   var dbname = location.toString().match(/\/(howmm?)\//)[1];
   howmm.db   = zaisu.DB.init(dbname);
   $.couch.db = zaisu.DB.init;
 
   howmm.docs = function(element, app){
+    var self = this;
     $(element).evently("docs", app);
     $(element).pathbinder("index", "/docs");
     $(element).pathbinder("edit",  "/docs/edit/:id");
@@ -13,6 +15,47 @@ var howmm = {util: {}};
 
     this.index = function(){
       $(element).trigger("index");
+    }
+
+    this.local_index = function(){
+      howmm.db.cache.local.get(KEYS.DOC_ENTRIES, function(doc_entries_map){
+        var doc_entries = [];
+        $.each(doc_entries_map, function(id, info){
+          doc_entries.push({id:id, info:info});
+        });
+
+        //SORT
+        doc_entries.sort(function(a, b){
+          var da = new Date(a.info.updated_at);
+          var db = new Date(b.info.updated_at);
+          return (da > db) ? 1 : -1;
+        });
+
+        var max  = 25;
+        var docs = [];
+
+        (function(){
+          if(doc_entries.length > 0 && docs.length < max){
+            var continues = arguments.callee;
+            var next_d = doc_entries.pop();
+            howmm.db.cache.get(next_d.id, function(doc){
+              if(doc && doc._id.search(/^_design\//) < 0){
+                docs.push({
+                  id: next_d.id, key: next_d.id, value: doc
+                });
+              }
+              continues();
+            });
+
+          }else{
+            //done!!
+            $(element).trigger("index", [{
+              docs: {rows:docs, offset:0, total_rows:20}
+            }]);
+
+          }
+        })();
+      });
     }
   }
 
