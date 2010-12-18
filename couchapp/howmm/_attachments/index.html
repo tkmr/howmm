@@ -12,10 +12,7 @@
     <div id="docs_menu">
       <p></p>
       <p class="lefty">
-        <a class="button" href="#/docs/edit/new">new</a>
-      </p>
-      <p class="lefty">
-        <a class="button" href="#/docs">index</a>
+        <a class="button to_index" href="javascript:void(0);">index</a>
       </p>
       <p class="lefty">
         <a class="button to_sync" href="javascript:void(0);">sync</a>
@@ -23,7 +20,9 @@
       <p class="lefty">
         <a class="button to_refresh" href="javascript:void(0);">reload</a>
       </p>
-
+      <p class="lefty">
+        <a class="button to_search" href="javascript:void(0);">search</a>
+      </p>
       <div class="clear"></div>
     </div>
 
@@ -66,10 +65,6 @@
 
   <script type="text/javascript" charset="utf-8">
   $("document").ready(function(){
-
-    //DEV
-    //howmm.db.cache.remove('_design/howmm', console.log);
-
     //load CSS
     if(zaisu.util.is_ios()){
       zaisu.css.loader({
@@ -81,17 +76,31 @@
     var session = zaisu.Session.current;
     var account = new howmm.account("#account", session);
 
-    //Sync service
-    $("a.to_sync").click(howmm.db.sync.sync_run);
-
-    //Clear cache
-    $("a.to_refresh").click(function(){
+    //Dev environtment
+    var design_cache_clear = function(){
       howmm.db.cache.remove('_design/howmm', console.log);
-    });
+    }
+    if(howmm.db.name == 'howm_dev'){
+      design_cache_clear();
+    }
 
     //Start CouchApp
     $.couch.app(function(app) {
       var docs = new howmm.docs("#docs", app);
+      howmm.current_docs = docs;
+
+      //Index service
+      $("a.to_index").click(docs.index);
+
+      //search service
+      $("a.to_search").click(docs.search);
+
+      //Sync service
+      $("a.to_sync").click(howmm.db.sync.sync_run);
+
+      //Clear cache
+      $("a.to_refresh").click(design_cache_clear);
+
       docs.local_index();
     });
 

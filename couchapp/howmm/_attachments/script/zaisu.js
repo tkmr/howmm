@@ -32,6 +32,12 @@ var zaisu = zaisu || {};
     openDoc: function(id, options, ajaxOptions){
       console.log("now openDoc..." + id);
       options  = util.options_or_callback(options);
+
+      if(typeof(id) == 'undefined' || id == 'undefined'){
+        options.success(null);
+        return null;
+      }
+
       var self = this;
       var cache_got_doc = function(obj){
         self.cache.put(obj, {synced: true}, options.success);
