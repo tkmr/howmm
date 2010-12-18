@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="indexNO.manifest">
+<html manifest="index.manifest">
   <head>
     <title>howmm</title>
     <meta charset="utf-8">
@@ -18,10 +18,10 @@
         <a class="button" href="#/docs">index</a>
       </p>
       <p class="lefty">
-        <a class="button" href="#/docs/edit/new">search</a>
+        <a class="button to_sync" href="javascript:void(0);">sync</a>
       </p>
       <p class="lefty">
-        <a class="button to_sync" href="javascript:void(0);">sync</a>
+        <a class="button to_refresh" href="javascript:void(0);">reload</a>
       </p>
 
       <div class="clear"></div>
@@ -67,8 +67,8 @@
   <script type="text/javascript" charset="utf-8">
   $("document").ready(function(){
 
-    //remove Cahce
-    howmm.db.cache.remove('_design/howmm', console.log);
+    //DEV
+    //howmm.db.cache.remove('_design/howmm', console.log);
 
     //load CSS
     if(zaisu.util.is_ios()){
@@ -80,10 +80,14 @@
     //Session service
     var session = zaisu.Session.current;
     var account = new howmm.account("#account", session);
-    //session.aCheck_login.next(init_proc).run();
 
     //Sync service
     $("a.to_sync").click(howmm.db.sync.sync_run);
+
+    //Clear cache
+    $("a.to_refresh").click(function(){
+      howmm.db.cache.remove('_design/howmm', console.log);
+    });
 
     //Start CouchApp
     $.couch.app(function(app) {

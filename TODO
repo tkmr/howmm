@@ -1,26 +1,23 @@
 Important:
- - AutoSync (save / open / tou? さらにlocal_indexを呼ぶ)
- - Stop _change/ feed=long_poll を
+ - Pushの手順を作る (Rake? designのclearと、index.manifestの更新でOK?)
+ - howmm.docs.local_indexが docs.length == 0 の場合、viewから読み込ませる。
+ - AutoSync (save / open / tou? さらにlocal_indexを呼ぶ、syncは忘れやすいので)
+   => successでmessageを表示
  - localStorage の容量オーバー対策
- - SyncがにじゅうPOST? /PUT /PUT
  - wiki link (全文検索)
- - Geolocation
- - Timezone
 
- - Spec for couch_error
- - zaisu.DB.saveDoc のconflict対策.. (message alert?)
-
- -  _rev対応、historyみたい
- - iPad / iPhone 最適化 (UI)
- - UI (サイズ、一行目をリンクに、時刻は見やすく、H2 や A など、preとoverflow）
- - EditのTrigger（iPhone系と分ける、文字サイズなどは極力同じにする）
-
-switch production:
+TODO switch production:
  - index.manifest
  - remove [ howmm.db.cache.remove('_design/howmm', console.log); ]
 
-
 Pending:
+ - Geolocation
+ -  _rev対応、history見たい
+ - zaisu.DB.saveDoc のconflict対策.. (message alert?)
+ - Stop _change/ feed=long_poll を
+ - SyncがにじゅうPOST? /PUT /PUT
+ - Timezone が狂う？
+ - Spec for couch_error
  - keyword input
  - Arrowの設計を見直し
  - optionsのmix (query stringにつく)

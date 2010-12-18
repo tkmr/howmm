@@ -2,7 +2,7 @@ var howmm = {util: {}};
 (function(){with(Arrow){
   var KEYS   = zaisu.Keys;
 
-  var dbname = location.toString().match(/\/(howmm?)\//)[1];
+  var dbname = location.toString().match(/\/(howm[^\/]*)\//)[1];
   howmm.db   = zaisu.DB.init(dbname);
   $.couch.db = zaisu.DB.init;
 
